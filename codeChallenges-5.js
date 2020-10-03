@@ -129,9 +129,61 @@ function organizingContainers(matrix = []) {
   for (let index = 0; index < matrix.length; index++) {
     COLUMNS.push(matrix[index].reduce((a, b) => a + b));
     ROWS.push(matrix.map((arr) => arr[index]).reduce((a, b) => a + b));
-  };
+  }
   COLUMNS.sort((a, b) => a - b);
   ROWS.sort((a, b) => a - b);
   return COLUMNS.every((val, i) => val === ROWS[i]) ? "Possible" : "Impossible";
-};
+}
 
+function cavityMap(grid) {
+  const GRID = grid.map((row) =>
+    row.split("").map((val, i) => ({
+      position: i,
+      val: Number(val),
+    }))
+  );
+  const MATRIX = [];
+  for (let rowIndex = 0; rowIndex < GRID.length; rowIndex++) {
+    const ROW = GRID[rowIndex].map((cell) => {
+      const [prevRow = [], nextRow = []] = [
+        GRID[rowIndex - 1],
+        GRID[rowIndex + 1],
+      ];
+      return {
+        ...cell,
+        borders: [
+          GRID[rowIndex][cell.position - 1],
+          GRID[rowIndex][cell.position + 1],
+          prevRow[cell.position],
+          nextRow[cell.position],
+        ].map((cell) => (cell ? cell.val : null)),
+      };
+    });
+    MATRIX.push(ROW);
+  }
+  const VALID_CELLS = MATRIX.reduce((a, b) => a.concat(b)).filter((cell) =>
+    cell.borders.every((val) => val && val < cell.val)
+  );
+  return MATRIX.map((ROW) =>
+    ROW.map((cell) => {
+      if (VALID_CELLS.some((c) => c === cell)) {
+        cell.val = "X";
+      }
+      return cell.val + "";
+    }).reduce((a, b) => a + b)
+  );
+};
+const arr = [
+  179443854,
+  961621369,
+  164139922,
+  968633951,
+  812882578,
+  257829163,
+  812438597,
+  176656233,
+  485773814,
+].map((arr) => arr + "");
+console.log(cavityMap(arr));
+console.log(cavityMap(["989", "191", "111"]));
+console.log(cavityMap(["1112", "1912", "1892", "1234"]));
