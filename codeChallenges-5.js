@@ -173,17 +173,31 @@ function cavityMap(grid) {
     }).reduce((a, b) => a + b)
   );
 };
-const arr = [
-  179443854,
-  961621369,
-  164139922,
-  968633951,
-  812882578,
-  257829163,
-  812438597,
-  176656233,
-  485773814,
-].map((arr) => arr + "");
-console.log(cavityMap(arr));
-console.log(cavityMap(["989", "191", "111"]));
-console.log(cavityMap(["1112", "1912", "1892", "1234"]));
+
+function minimumDistances(arr = []) {
+  if ([...new Set(arr)].length === arr.length) {
+    return -1; 
+  } else {
+    const ITEMS = arr.map((element, index) => ({
+      index,
+      val: element,
+    }));
+    const FILTERED_ITEMS = ITEMS.filter((element) =>
+      ITEMS.some(
+        ({ val, index }) =>
+          val === element.val &&
+          (element.index > index || element.index < index)
+      )
+    );
+    const DISTANCES = FILTERED_ITEMS.map((element) => {
+      const closetsElement = FILTERED_ITEMS.find(
+        ({val, index}) =>
+          val === element.val &&
+          (index < element.index || index > element.index)
+      );
+      return Math.abs(element.index - closetsElement.index);
+    });
+    return Math.min(...DISTANCES);
+  };
+};
+
