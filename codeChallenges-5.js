@@ -172,11 +172,11 @@ function cavityMap(grid) {
       return cell.val + "";
     }).reduce((a, b) => a + b)
   );
-};
+}
 
 function minimumDistances(arr = []) {
   if ([...new Set(arr)].length === arr.length) {
-    return -1; 
+    return -1;
   } else {
     const ITEMS = arr.map((element, index) => ({
       index,
@@ -191,13 +191,34 @@ function minimumDistances(arr = []) {
     );
     const DISTANCES = FILTERED_ITEMS.map((element) => {
       const closetsElement = FILTERED_ITEMS.find(
-        ({val, index}) =>
+        ({ val, index }) =>
           val === element.val &&
           (index < element.index || index > element.index)
       );
       return Math.abs(element.index - closetsElement.index);
     });
     return Math.min(...DISTANCES);
-  };
-};
+  }
+}
 
+function flatlandSpaceStations(citiesCount, spacestations = []) {
+  if (citiesCount === spacestations.length) {
+    return 0; // Each city has Spacestation, there's not distance for each city
+  } else {
+    const sortedSpacestations = spacestations.sort((a, b) => a - b);
+    const distancesToNearestSpacestation = [];
+    const before = sortedSpacestations[0];
+    const after =
+      Math.abs(
+        citiesCount - sortedSpacestations[sortedSpacestations.length - 1]
+      ) - 1;
+    for (let index = 0; index < sortedSpacestations.length - 1; index++) {
+      const dist = Math.floor(
+        Math.abs(sortedSpacestations[index + 1] - sortedSpacestations[index]) /
+          2
+      );
+      distancesToNearestSpacestation.push(dist);
+    }
+    return Math.max(before, after, ...distancesToNearestSpacestation);
+  }
+};
