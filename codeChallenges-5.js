@@ -221,4 +221,15 @@ function flatlandSpaceStations(citiesCount, spacestations = []) {
     }
     return Math.max(before, after, ...distancesToNearestSpacestation);
   }
+}
+
+function chocolateFeast(moneyToSpend, chocolateCost, wrappersToTurn) {
+  let chocolates = moneyToSpend / chocolateCost;
+  let wrappers = chocolates;
+  while (wrappers >= wrappersToTurn) {
+    wrappers = wrappers - wrappersToTurn;
+    wrappers++;
+    chocolates++;
+  }
+  return Math.floor(chocolates);
 };
