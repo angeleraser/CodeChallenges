@@ -232,4 +232,27 @@ function chocolateFeast(moneyToSpend, chocolateCost, wrappersToTurn) {
     chocolates++;
   }
   return Math.floor(chocolates);
+}
+
+function fairRations(persons) {
+  if (persons.reduce((a, b) => a + b) % 2 !== 0) {
+    return "NO";
+  } else {
+    const PERSONS = persons.map((p) => ({
+      loafOfBreads: p,
+    }));
+    let loafOfBreadDelivered = 0;
+    for (let p = 0; p < PERSONS.length; p += 1) {
+      if (PERSONS[p].loafOfBreads % 2 !== 0) {
+        // Front person receive a loaf
+        (PERSONS[p].loafOfBreads += 1), (loafOfBreadDelivered += 1);
+        // Behind person receive a loaf
+        (PERSONS[p + 1].loafOfBreads += 1), (loafOfBreadDelivered += 1);
+      }
+    }
+    return loafOfBreadDelivered;
+  }
 };
+
+fairRations([4, 5, 6, 7]);
+fairRations([2, 3, 4, 5, 6]);
