@@ -252,7 +252,30 @@ function fairRations(persons) {
     }
     return loafOfBreadDelivered;
   }
-};
+}
 
-fairRations([4, 5, 6, 7]);
-fairRations([2, 3, 4, 5, 6]);
+function kaprekarNumbers(min, max) {
+  const NUMBERS = [];
+  for (let num = min; num <= max; num++) {
+    let squareN = Math.pow(num, 2);
+    if (squareN < 10) {
+      squareN = "0" + squareN;
+    } else {
+      squareN += "";
+    }
+    const splittedNumber = squareN.split(""),
+      mid = Math.floor(splittedNumber.length / 2),
+      leftSide = splittedNumber.filter((n, i) => i < mid).join(""),
+      rightSide = splittedNumber.filter((n, i) => i >= mid).join(""),
+      sum = parseInt(leftSide, 10) + parseInt(rightSide, 10);
+    if (sum === num) NUMBERS.push(sum);
+  }
+  if (!!NUMBERS.length) {
+    NUMBERS.length > 1
+      ? console.log(NUMBERS.join(" "))
+      : console.log(NUMBERS.join(""));
+  } else {
+    console.log("INVALID RANGE");
+  }
+  return NUMBERS.length ? NUMBERS : "INVALID RANGE";
+}
