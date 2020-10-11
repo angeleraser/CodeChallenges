@@ -279,3 +279,28 @@ function kaprekarNumbers(min, max) {
   }
   return NUMBERS.length ? NUMBERS : "INVALID RANGE";
 }
+
+function encryption(s = "") {
+  const string = s.replace(/\s/g, ""), // remove whitespaces
+    columns = Math.ceil(Math.sqrt(string.length)),
+    rows = Math.floor(Math.sqrt(string.length)),
+    stringGrid = [];
+  let rowCount = 0;
+  for (let rowIndx = 0; rowIndx <= rows; rowIndx += 1) {
+    const row = string
+      .split("")
+      .filter((letter, indx) => indx < columns + rowCount && indx >= rowCount);
+    if (row.length) {
+      stringGrid.push(row);
+      rowCount += row.length;
+    }
+  }
+
+  const result = stringGrid[0]
+    .map((letter, index) =>
+      // Find the letters with the same index to create the column
+      stringGrid.map((row) => (row[index] ? row[index] : "")).join("")
+    )
+    .join(" ");
+  return result;
+};
