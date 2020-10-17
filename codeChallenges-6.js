@@ -178,3 +178,35 @@ function serviceLane(width, cases) {
   });
   return largestVehiclesType;
 }
+function stones(stonesCount, dA, dB) {
+  stonesCount === 2 && dA > 1 && dB > 1((stonesCount = 3));
+  const STONE_VALUES = [];
+  const permutations = [
+    [dA, dA],
+    [dB, dA],
+    [dB, dB],
+  ];
+  for (const diff of [dA, dB]) {
+    const stoneValues = permutations.map((permutation) => {
+      let value = diff,
+        count = 1;
+      while (count < stonesCount - 1) {
+        if (count % 2 === 0) value += permutation[0];
+        else value += permutation[1];
+        count += 1;
+      }
+      return value;
+    });
+    STONE_VALUES.push(...stoneValues);
+  }
+  const [min, next, ...rest] = [...new Set(STONE_VALUES)].sort((a, b) => a - b),
+    max = rest[rest.length - 1],
+    diff = next - min;
+  let currentStone = min;
+  const allPossibleStoneValues = [min];
+  while (currentStone < max) {
+    currentStone += diff;
+    allPossibleStoneValues.push(currentStone);
+  }
+  return allPossibleStoneValues;
+};
