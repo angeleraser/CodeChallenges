@@ -209,4 +209,42 @@ function stones(stonesCount, dA, dB) {
     allPossibleStoneValues.push(currentStone);
   }
   return allPossibleStoneValues;
-};
+}
+
+function workbook(chaptersCount, max, problemsByChapter) {
+  let bookPagesCount = 1;
+  const specialProblems = problemsByChapter.reduce(
+    (specialProblemsCount, count, i) => {
+      const chapter = {
+        index: ++i,
+        pages: [],
+      };
+      let pagesCount = Math.ceil(count / max),
+        problemsCount = count,
+        problemIndex = 1,
+        pageIndex = 0;
+      for (let index = 1; index <= pagesCount; index += 1) {
+        chapter.pages.push({
+          index: bookPagesCount,
+          problems: [],
+        });
+        bookPagesCount += 1;
+      }
+      while (problemsCount) {
+        chapter.pages[pageIndex].problems.push(problemIndex);
+        problemIndex += 1;
+        problemsCount -= 1;
+        if (chapter.pages[pageIndex].problems.length === max) pageIndex += 1;
+      }
+      return (
+        specialProblemsCount +
+        chapter.pages.filter(({ index: pIndex, problems }, _, pages) =>
+          problems.some((problem) => problem === pIndex)
+        ).length
+      );
+    },
+    0
+  );
+  return specialProblems;
+}
+console.log(workbook(5, 3, [4, 2, 6, 1, 10]));
