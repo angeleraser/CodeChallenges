@@ -247,4 +247,75 @@ function workbook(chaptersCount, max, problemsByChapter) {
   );
   return specialProblems;
 }
-console.log(workbook(5, 3, [4, 2, 6, 1, 10]));
+
+function gridSearch(grid, pattern) {
+  const patternsFound = [];
+  for (let index = 0; index < grid.length; index += 1) {
+    for (const p of pattern) {
+      const regExp = RegExp(`${p}`, "g"),
+        pFound = regExp.exec(grid[index]);
+      if (pFound) {
+        patternsFound.push({
+          rowIndex: index,
+          patternFound: {
+            value: pFound[0],
+            position: pFound.index,
+          },
+        });
+      }
+    }
+  }
+  const isGridPattern = patternsFound.every((pt, pIndex) => {
+    const hasTheSamePosition = patternsFound.every(
+        ({ patternFound: { position } }) =>
+          pt.patternFound.position === position
+      ),
+      isConsecutiveRow =
+        Math.abs(
+          pt.rowIndex -
+            patternsFound[
+              pIndex !== patternsFound.length - 1 ? ++pIndex : --pIndex
+            ].rowIndex
+        ) === 1;
+    return hasTheSamePosition && isConsecutiveRow;
+  });
+  return isGridPattern ? "YES" : "NO";
+}
+// DD_FQQQF
+// DD_FQQQF
+const howManyDifferentCharacters = (str) => {
+  const splittedString = str.split(""),
+    parsedString = [...new Set(splittedString)];
+  const charactersCount = parsedString.reduce((characters, letter) => {
+    return characters.concat({
+      letter,
+      count: splittedString.filter((val) => val === letter).length,
+    });
+  }, []);
+  return charactersCount;
+};
+function happyLadybugs(b) {
+  const charactersCount = howManyDifferentCharacters(b),
+    colors = charactersCount.filter(({ letter }) => letter !== "_"),
+    underscores = charactersCount.find((item) => item.letter === "_") || {
+      count: 0,
+    },
+    onlyUnderscores =
+      charactersCount.length === 1 && charactersCount[0].letter === "_",
+    moreThanOneCharacterPerColor = colors.every((c) => c.count >= 2);
+  if (onlyUnderscores) {
+    return "YES";
+  } else if (moreThanOneCharacterPerColor && underscores.count > 0) {
+    return "YES";
+  } else if (!underscores.count) {
+    const splittedString = b.split("");
+    const isHappy = splittedString.every((letter, index) => {
+      const next = splittedString[index + 1];
+      const prev = splittedString[index - 1];
+      return letter === next || letter === prev;
+    });
+    return isHappy ? "YES" : "NO";
+  } else {
+    return "NO";
+  }
+}
