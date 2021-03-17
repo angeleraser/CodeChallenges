@@ -1,0 +1,24 @@
+{
+  "name": "codechallenges",
+  "version": "1.0.0",
+  "description": "",
+  "main": "codeChallenges-1.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/angeleraser/CodeChallenges.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/angeleraser/CodeChallenges/issues"
+  },
+  "homepage": "https://github.com/angeleraser/CodeChallenges#readme",
+  "dependencies": {
+    "lodash": "^4.17.20",
+    "webpack": "^5.22.0",
+    "webpack-cli": "^4.5.0"
+  }
+}

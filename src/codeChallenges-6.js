@@ -248,41 +248,54 @@ function workbook(chaptersCount, max, problemsByChapter) {
   return specialProblems;
 }
 
+const sliceItems = (arr, start, end) => arr.slice(start, end);
+
+
 function gridSearch(grid, pattern) {
-  const patternsFound = [];
-  for (let index = 0; index < grid.length; index += 1) {
-    for (const p of pattern) {
-      const regExp = RegExp(`${p}`, "g"),
-        pFound = regExp.exec(grid[index]);
-      if (pFound) {
-        patternsFound.push({
-          rowIndex: index,
-          patternFound: {
-            value: pFound[0],
-            position: pFound.index,
-          },
-        });
+  const length = pattern[0].length,
+    subGrid = {
+      isPattern: false,
+      pattern: null,
+    };
+  for (let rowIndex = 0; rowIndex < grid.length; rowIndex++) {
+    const ROW = grid[rowIndex].split("");
+    const nextRows = sliceItems(grid, rowIndex + 1, rowIndex + pattern.length);
+    let valIndex = 0;
+    while (valIndex < ROW.length) {
+      valIndex += 1;
+      const group = sliceItems(ROW, valIndex, valIndex + length).join(""),
+        nextGroups = nextRows.map((g) =>
+          sliceItems(g, valIndex, valIndex + length)
+        ),
+        patternFound = [group, ...nextGroups];
+      if (patternFound.join("") === pattern.join("")) {
+        subGrid.isPattern = true;
+        subGrid.pattern = patternFound;
       }
     }
+    if (subGrid.isPattern) break;
   }
-  const isGridPattern = patternsFound.every((pt, pIndex) => {
-    const hasTheSamePosition = patternsFound.every(
-        ({ patternFound: { position } }) =>
-          pt.patternFound.position === position
-      ),
-      isConsecutiveRow =
-        Math.abs(
-          pt.rowIndex -
-            patternsFound[
-              pIndex !== patternsFound.length - 1 ? ++pIndex : --pIndex
-            ].rowIndex
-        ) === 1;
-    return hasTheSamePosition && isConsecutiveRow;
-  });
-  return isGridPattern ? "YES" : "NO";
+  console.log(subGrid);
+  return subGrid.isPattern ? "YES" : "NO";
 }
-// DD_FQQQF
-// DD_FQQQF
+
+// console.log(
+//   gridSearch(
+//     [
+//       "7283455864",
+//       "6731158619",
+//       "8988242643",
+//       "3830589324",
+//       "2229505813",
+//       "5633845374",
+//       "6473530293",
+//       "7053106601",
+//       "0834282956",
+//       "4607924137",
+//     ],
+//     ["9505", "3845", "3530"]
+//   )
+// );
 const howManyDifferentCharacters = (str) => {
   const splittedString = str.split(""),
     parsedString = [...new Set(splittedString)];
